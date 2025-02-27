@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Time Clock</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+  </head>
+  <body>
+    <div class="container">
+      <h2>Employee Time Clock</h2>
+      <div id="loginSection">
+        <label for="employeeId">Employee ID:</label>
+        <input type="text" id="employeeId" placeholder="Enter your Employee ID" required>
+        <button onclick="login()">Log In</button>
+      </div>
+
+      <div id="timeSection" class="hidden">
+        <div class="clock" id="clock"></div>
+        <div class="date" id="date"></div>
+        <button onclick="timeIn()">Time In</button>
+        <button onclick="timeOut()">Time Out</button>
+        <button onclick="showOvertimeForm()">Request Overtime</button>
+        <button onclick="logout()">Log Out</button>
+      </div>
+
+      <div id="overtimeSection" class="hidden">
+        <h3>Overtime Request</h3>
+        <label for="overtimeReason">Reason for Overtime:</label>
+        <textarea id="overtimeReason" rows="4" placeholder="Enter your reason..."></textarea>
+        <button onclick="submitOvertime()">Submit</button>
+        <button onclick="hideOvertimeForm()">Cancel</button>
+      </div>
+
+      <div id="successMessage" class="success-message"></div>
+      <div id="checkmark" class="checkmark">✔️</div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
