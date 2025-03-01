@@ -1,41 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee Time Clock</title>
-    <link rel="stylesheet" type="text/css" href="styles.css">
-  </head>
-  <body>
-    <div class="container">
-      <h2>Employee Time Clock</h2>
-      <div id="loginSection">
-        <label for="employeeId">Employee ID:</label>
-        <input type="text" id="employeeId" placeholder="Enter your Employee ID" required>
-        <button onclick="login()">Log In</button>
-      </div>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employee Time Clock</title>
+  <!-- Tailwind CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link href="styles.css" rel="stylesheet">
+  <!-- Animate.css for animations -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+  <!-- Logo Container -->
+  <div class="logo-container">
+    <img src="https://i.postimg.cc/Bvzjc3ps/MM3.jpg" alt="Company Logo" class="logo">
+  </div>
 
-      <div id="timeSection" class="hidden">
-        <div class="clock" id="clock"></div>
-        <div class="date" id="date"></div>
-        <button onclick="timeIn()">Time In</button>
-        <button onclick="timeOut()">Time Out</button>
-        <button onclick="showOvertimeForm()">Request Overtime</button>
-        <button onclick="logout()">Log Out</button>
-      </div>
-
-      <div id="overtimeSection" class="hidden">
-        <h3>Overtime Request</h3>
-        <label for="overtimeReason">Reason for Overtime:</label>
-        <textarea id="overtimeReason" rows="4" placeholder="Enter your reason..."></textarea>
-        <button onclick="submitOvertime()">Submit</button>
-        <button onclick="hideOvertimeForm()">Cancel</button>
-      </div>
-
-      <div id="successMessage" class="success-message"></div>
-      <div id="checkmark" class="checkmark">✔️</div>
+  <div class="container mx-auto p-4">
+    <!-- Login Form -->
+    <div id="loginForm" class="bg-white p-6 rounded-lg shadow-md max-w-md mx-auto">
+      <h2 class="text-2xl font-bold text-center mb-6">Employee Login</h2>
+      <form>
+        <div class="mb-4">
+          <select id="employeeDropdown" class="w-full p-2 border border-gray-300 rounded mt-1">
+            <option value="">Loading...</option>
+          </select>
+        </div>
+        <div class="mb-4">
+          <label for="employeePin" class="block text-gray-700">Enter PIN</label>
+          <input type="password" id="employeePin" class="w-full p-2 border border-gray-300 rounded mt-1" placeholder="Enter your PIN" required>
+        </div>
+        <button type="button" id="loginBtn" class="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Login</button>
+      </form>
     </div>
 
-    <script src="script.js"></script>
-  </body>
+    <!-- Time Clock Form (Hidden by Default) -->
+    <div id="timeClockForm" class="hidden bg-white p-6 rounded-lg shadow-md max-w-md mx-auto">
+      <h2 class="text-2xl font-bold text-center mb-6">Employee Time Clock</h2>
+      <div class="text-center mb-4">
+        <p id="loggedInEmployee" class="text-lg font-semibold text-blue-600"></p>
+      </div>
+      <div class="text-center mb-6">
+        <p id="currentDate" class="text-lg font-semibold"></p>
+        <p id="currentTime" class="text-2xl font-bold"></p>
+      </div>
+      <div class="text-center">
+        <button type="button" id="clockBtn" class="bg-blue-500 text-white px-8 py-3 rounded-full hover:bg-blue-600">Clock In</button>
+      </div>
+      <div class="text-center mt-4">
+        <button type="button" id="overtimeRequestBtn" class="bg-green-500 text-white px-8 py-3 rounded-full hover:bg-green-600">Overtime Request</button>
+      </div>
+      <div class="mt-6">
+        <p id="clockedInTime" class="text-gray-700"></p>
+        <p id="renderedHours" class="text-gray-700"></p>
+        <p id="overtime" class="text-gray-700"></p>
+        <p id="clockedOutTime" class="text-gray-700"></p>
+      </div>
+      <div class="mt-6 bg-gray-100 p-4 rounded-lg text-center cursor-pointer hover:bg-gray-200" id="logoutBtn">
+        <span class="text-black">Logout</span>
+      </div>
+    </div>
+
+    <!-- Overtime Request Modal (Hidden by Default) -->
+    <div id="overtimeRequestModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+      <div class="bg-white p-6 rounded-lg shadow-md max-w-md w-full">
+        <h2 class="text-2xl font-bold text-center mb-6">Overtime Request</h2>
+        <textarea id="overtimeReason" class="w-full p-2 border border-gray-300 rounded mt-1" placeholder="Enter your reason" rows="4"></textarea>
+        <div class="flex justify-between mt-6">
+          <button type="button" id="submitOvertimeBtn" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Submit</button>
+          <button type="button" id="cancelOvertimeBtn" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Clock History Dashboard -->
+<div id="historyDashboard" class="mt-8 hidden">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-2xl font-bold">Employee Clock History</h2>
+      <button type="button" id="clearHistoryBtn" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Clear History</button>
+    </div>
+    <table class="w-full bg-white rounded-lg shadow-md">
+      <thead>
+        <tr class="bg-gray-200">
+          <th class="p-3 text-left">DATE</th>
+          <th class="p-3 text-left">ACTION</th>
+          <th class="p-3 text-left">TIME</th>
+        </tr>
+      </thead>
+      <tbody id="historyTable">
+        <!-- Rows will be added dynamically -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast animate__animated animate__fadeInDown"></div>
+
+  <!-- JavaScript -->
+  <script src="script.js"></script>
+</body>
 </html>
