@@ -6,12 +6,12 @@
   }
   
   /* Logo Styling */
-  .logo {
-    width: 150px; /* Adjust size as needed */
-    height: auto;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  }
+        .logo {
+            width: 100%; /* Stretch the logo to fill the container width */
+            height: auto; /* Maintain aspect ratio */
+            border-radius: 10px; /* Optional: Add rounded corners */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional: Add a subtle shadow */
+        }
   
   /* Toast Notification */
   .toast {
