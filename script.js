@@ -1,6 +1,6 @@
 // script.js
 
-const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxaaCbGcCR5YoLE-ZFBSe_X_APLgzU7KW_Xau3CQfmNMabwmc3mARE3RHLDOq-qyxcJ/exec'; // Replace with your Web App URL
+const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzx6QYKVN0nXhLwMeiLkFjn98VajWIIBND-aVUjz-Nr1jLMjG9vdekVKZ8Hh6sr6fM4/exec'; // Replace with your Web App URL
 
 let clockedInTime = null;
 let clockedOutTime = null;
@@ -29,7 +29,6 @@ async function sendToGoogleSheets(data) {
 
     const result = await response.text();
     console.log(result); // Log the response from Google Apps Script
-    showToast(result); // Show a toast notification with the result
   } catch (error) {
     console.error('Error submitting data:', error);
     showToast('Error submitting data. Please try again.');
@@ -40,10 +39,10 @@ async function sendToGoogleSheets(data) {
 function submitTimeLog(date, employeeId, clockIn, clockOut) {
   const data = {
     type: 'timeLog',
-    date: date,
+    date: date, // Include the date
     employeeId: employeeId,
-    clockIn: clockIn,
-    clockOut: clockOut,
+    clockIn: clockIn || '', // Send empty string if clockIn is not provided
+    clockOut: clockOut || '' // Send empty string if clockOut is not provided
   };
   sendToGoogleSheets(data);
 }
@@ -160,7 +159,7 @@ function logout() {
   // Hide time clock form and show login form
   document.getElementById('timeClockForm').classList.add('hidden');
   document.getElementById('historyDashboard').classList.add('hidden');
-  document.getElementById('loginForm').class.classList.remove('hidden');
+  document.getElementById('loginForm').classList.remove('hidden');
 
   // Reset clock data
   clockedInTime = null;
@@ -285,9 +284,12 @@ document.getElementById('loginBtn').addEventListener('click', () => {
 document.getElementById('clockBtn').addEventListener('click', () => {
   const now = new Date();
   const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+  const dateOptions = { year: 'numeric', month: 'long', day: '2-digit' };
 
   // Subtract 6 minutes for the grace period
   now.setMinutes(now.getMinutes() - 6);
+
+  const currentDate = now.toLocaleDateString('en-US', dateOptions); // Get the current date
 
   if (!clockedInTime) {
     // Clock In
@@ -304,10 +306,10 @@ document.getElementById('clockBtn').addEventListener('click', () => {
 
     // Submit TimeLog data to Google Sheets
     submitTimeLog(
-      now.toLocaleDateString('en-US'),
+      currentDate, // Pass the current date
       currentEmployeeId,
       now.toLocaleTimeString('en-US', timeOptions),
-      ''
+      '' // No clock out time for clock in
     );
 
     // Start calculating rendered hours
@@ -327,9 +329,9 @@ document.getElementById('clockBtn').addEventListener('click', () => {
 
     // Submit TimeLog data to Google Sheets
     submitTimeLog(
-      now.toLocaleDateString('en-US'),
+      currentDate, // Pass the current date
       currentEmployeeId,
-      clockedInTime.toLocaleTimeString('en-US', timeOptions),
+      '', // No clock in time for clock out
       now.toLocaleTimeString('en-US', timeOptions)
     );
 
