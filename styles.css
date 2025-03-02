@@ -1,62 +1,62 @@
 /* Background Overlay with Blur */
 .background-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: url('https://i.postimg.cc/K8FBRmqH/MMFC-LOGO-GOLD.png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    filter: blur(8px); /* Add blur effect */
-    z-index: -1;
-    opacity: 0.2; /* Adjust opacity as needed */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('https://i.postimg.cc/K8FBRmqH/MMFC-LOGO-GOLD.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: blur(8px); /* Add blur effect */
+  z-index: -1;
+  opacity: 0.2; /* Adjust opacity as needed */
 }
 
 /* Logo Container */
 .logo-container {
-    width: 100%;
-    text-align: center;
-    margin-bottom: 20px;
-    position: relative;
-    z-index: 10; /* Ensure the logo is above the background overlay */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 150px; /* Adjust height as needed */
+  width: 100%;
+  text-align: center;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 10; /* Ensure the logo is above the background overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 150px; /* Adjust height as needed */
 }
 
 /* Logo Styling */
 .logo {
-    max-width: 100%;
-    max-height: 100%;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 /* Toast Notification */
 .toast {
-    display: none;
-    position: fixed;
-    top: 1rem;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #10B981; /* Green */
-    color: white;
-    padding: 1rem;
-    border-radius: 0.5rem;
-    animation: fadeInDown 0.5s ease-out;
-    z-index: 20; /* Ensure toast is above everything */
+  display: none;
+  position: fixed;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #10B981; /* Green */
+  color: white;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  animation: fadeInDown 0.5s ease-out;
+  z-index: 20; /* Ensure toast is above everything */
 }
 
 @keyframes fadeInDown {
-    from {
-        opacity: 0;
-        transform: translate(-50%, -20px);
-    }
-    to {
-        opacity: 1;
-        transform: translate(-50%, 0);
-    }
+  from {
+      opacity: 0;
+      transform: translate(-50%, -20px);
+  }
+  to {
+      opacity: 1;
+      transform: translate(-50%, 0);
+  }
 }
