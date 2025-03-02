@@ -1,3 +1,7 @@
+// script.js
+
+const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxaaCbGcCR5YoLE-ZFBSe_X_APLgzU7KW_Xau3CQfmNMabwmc3mARE3RHLDOq-qyxcJ/exec'; // Replace with your Web App URL
+
 let clockedInTime = null;
 let clockedOutTime = null;
 let intervalId = null;
@@ -11,11 +15,55 @@ const employees = [
   { id: '2019-004', pin: '1415' },
 ];
 
+// Function to send data to Google Sheets
+async function sendToGoogleSheets(data) {
+  try {
+    const response = await fetch(WEB_APP_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+      mode: 'no-cors', // Add this line to bypass CORS
+    });
+
+    const result = await response.text();
+    console.log(result); // Log the response from Google Apps Script
+    showToast(result); // Show a toast notification with the result
+  } catch (error) {
+    console.error('Error submitting data:', error);
+    showToast('Error submitting data. Please try again.');
+  }
+}
+
+// Function to submit TimeLog data
+function submitTimeLog(date, employeeId, clockIn, clockOut) {
+  const data = {
+    type: 'timeLog',
+    date: date,
+    employeeId: employeeId,
+    clockIn: clockIn,
+    clockOut: clockOut,
+  };
+  sendToGoogleSheets(data);
+}
+
+// Function to submit OvertimeLog data
+function submitOvertimeLog(date, employeeId, reason) {
+  const data = {
+    type: 'overtimeLog',
+    date: date,
+    employeeId: employeeId,
+    reason: reason,
+  };
+  sendToGoogleSheets(data);
+}
+
 // Fetch Employee IDs from Google Sheets (Mock for now)
 function fetchEmployeeIDs() {
   const dropdown = document.getElementById('employeeDropdown');
   dropdown.innerHTML = '<option value="">Select Employee ID</option>';
-  employees.forEach(emp => {
+  employees.forEach((emp) => {
     dropdown.innerHTML += `<option value="${emp.id}">${emp.id}</option>`;
   });
 }
@@ -99,7 +147,7 @@ function showToast(message) {
   const toast = document.getElementById('toast');
   toast.textContent = message;
   toast.style.display = 'block';
-  setTimeout(() => toast.style.display = 'none', 3000);
+  setTimeout(() => (toast.style.display = 'none'), 3000);
 }
 
 // Logout Function
@@ -112,7 +160,7 @@ function logout() {
   // Hide time clock form and show login form
   document.getElementById('timeClockForm').classList.add('hidden');
   document.getElementById('historyDashboard').classList.add('hidden');
-  document.getElementById('loginForm').classList.remove('hidden');
+  document.getElementById('loginForm').class.classList.remove('hidden');
 
   // Reset clock data
   clockedInTime = null;
@@ -130,7 +178,7 @@ function logout() {
 
 // Validate Employee ID and PIN
 function validateEmployee(employeeId, pin) {
-  return employees.find(emp => emp.id === employeeId && emp.pin === pin);
+  return employees.find((emp) => emp.id === employeeId && emp.pin === pin);
 }
 
 // Function to add a record to the clock history
@@ -171,7 +219,7 @@ function updateClockHistoryTable() {
   // Load history for the logged-in employee
   const history = JSON.parse(localStorage.getItem(`clockHistory_${currentEmployeeId}`)) || [];
 
-  history.forEach(record => {
+  history.forEach((record) => {
     const row = document.createElement('tr');
     row.innerHTML = `
       <td class="p-3 text-left">${record.date}</td>
@@ -254,6 +302,14 @@ document.getElementById('clockBtn').addEventListener('click', () => {
     // Save clock state
     saveClockState(currentEmployeeId);
 
+    // Submit TimeLog data to Google Sheets
+    submitTimeLog(
+      now.toLocaleDateString('en-US'),
+      currentEmployeeId,
+      now.toLocaleTimeString('en-US', timeOptions),
+      ''
+    );
+
     // Start calculating rendered hours
     intervalId = setInterval(calculateRenderedHours, 1000);
   } else {
@@ -268,6 +324,14 @@ document.getElementById('clockBtn').addEventListener('click', () => {
 
     // Save clock state
     saveClockState(currentEmployeeId);
+
+    // Submit TimeLog data to Google Sheets
+    submitTimeLog(
+      now.toLocaleDateString('en-US'),
+      currentEmployeeId,
+      clockedInTime.toLocaleTimeString('en-US', timeOptions),
+      now.toLocaleTimeString('en-US', timeOptions)
+    );
 
     // Stop calculating rendered hours
     clearInterval(intervalId);
@@ -303,6 +367,14 @@ document.getElementById('submitOvertimeBtn').addEventListener('click', () => {
 
   // Show success message
   showToast('Overtime request submitted successfully!');
+
+  // Submit OvertimeLog data to Google Sheets
+  const now = new Date();
+  submitOvertimeLog(
+    now.toLocaleDateString('en-US'),
+    currentEmployeeId,
+    reason
+  );
 
   // Clear the textarea and hide the modal
   document.getElementById('overtimeReason').value = '';
