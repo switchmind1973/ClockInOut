@@ -1,17 +1,16 @@
-/* Background Overlay with Blur */
+/* Background Overlay */
 .background-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: url('https://i.postimg.cc/K8FBRmqH/MMFC-LOGO-GOLD.png');
+  background-image: url('MMFC-LOGO-GOLD.png'); /* Update path */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  filter: blur(8px); /* Add blur effect */
   z-index: -1;
-  opacity: 0.2; /* Adjust opacity as needed */
+  opacity: 0.5; /* Adjust opacity as needed */
 }
 
 /* Logo Container */
@@ -24,15 +23,19 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 150px; /* Adjust height as needed */
+  height: 120px; /* Adjust height as needed */
+  background-color: #f0f0f0; /* Light gray background */
+  padding: 10px; /* Add some padding */
+  border-radius: 10px; /* Rounded corners */
 }
 
 /* Logo Styling */
 .logo {
-  max-width: 100%;
-  max-height: 100%;
+  max-width: 100%; /* Ensure the logo does not exceed the container width */
+  max-height: 100%; /* Ensure the logo does not exceed the container height */
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  object-fit: contain; /* Ensures the logo maintains its aspect ratio */
 }
 
 /* Toast Notification */
@@ -52,11 +55,11 @@
 
 @keyframes fadeInDown {
   from {
-      opacity: 0;
-      transform: translate(-50%, -20px);
+    opacity: 0;
+    transform: translate(-50%, -20px);
   }
   to {
-      opacity: 1;
-      transform: translate(-50%, 0);
+    opacity: 1;
+    transform: translate(-50%, 0);
   }
 }
