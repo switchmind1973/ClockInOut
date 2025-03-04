@@ -10,7 +10,7 @@ let currentEmployeeId = null; // Track the currently logged-in employee
 // Sample employee data (replace with data from Google Sheets later)
 const employees = [
   { id: '2025-053', pin: '2553' },
-  { id: '2021-007', pin: '2107' },
+  { id: '2021-007', pin: '9999' },
   { id: '2021-006', pin: '1210' },
   { id: '2019-004', pin: '1145' },
 ];
